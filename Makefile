@@ -1,12 +1,20 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Isrc/core -Isrc/services -Isrc/infrastructure
 LDFLAGS = -lwinscard
 
-CORE_SOURCES = card_domain.c
-SERVICE_SOURCES = card_service.c
-INFRA_SOURCES = winscard_adapter.c
-UI_SOURCES = main.c
+# Пути к исходным файлам по слоям
+CORE_DIR = src/core
+SERVICES_DIR = src/services
+INFRA_DIR = src/infrastructure
+UI_DIR = src/ui
 
+# Исходные файлы по слоям
+CORE_SOURCES = $(CORE_DIR)/card_domain.c
+SERVICE_SOURCES = $(SERVICES_DIR)/card_service.c
+INFRA_SOURCES = $(INFRA_DIR)/winscard_adapter.c
+UI_SOURCES = $(UI_DIR)/main.c
+
+# Все исходные файлы
 SOURCES = $(CORE_SOURCES) $(SERVICE_SOURCES) $(INFRA_SOURCES) $(UI_SOURCES)
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTABLE = smart_card_app
@@ -20,7 +28,10 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del *.o
+	del $(CORE_DIR)\*.o
+	del $(SERVICES_DIR)\*.o
+	del $(INFRA_DIR)\*.o
+	del $(UI_DIR)\*.o
 	del $(EXECUTABLE).exe
 
 run: $(EXECUTABLE)
